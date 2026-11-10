@@ -12,23 +12,21 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+/**
+ * Tiny Chemistry commands.
+ *
+ * @module      tiny_chemistry/commands
+ * @copyright   2022 Huong Nguyen <huongnv13@gmail.com>
+ * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> was adapted for tiny_chemistry
+ * by Teaching and Learning Center (TLC, tlc@fh-ooe.at), FH Upper Austria
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 import {getButtonImage} from 'editor_tiny/utils';
 import {getString} from 'core/str';
 import {component, buttonName, icon} from 'tiny_chemistry/common';
 import {handleAction} from 'tiny_chemistry/ui';
 import {getSelectedChemistry} from 'tiny_chemistry/chemistry';
 import {isTexFilterActive} from 'tiny_chemistry/options';
-
-/**
- * Tiny Chemistry commands.
- *
- * @module      tiny_chemistry/commands
- * @copyright   2022 Huong Nguyen <huongnv13@gmail.com>
- * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> was adapted for tiny_chemistry for Moodle 5.2
- * by Teaching and Learning Center (TLC, tlc@fh-ooe.at), FH Upper Austria
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 
 export const getSetup = async() => {
     const [

@@ -19,22 +19,12 @@
  *
  * @package    tiny_chemistry
  * @copyright  2022 Huong Nguyen <huongnv13@gmail.com>
- * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> was adapted for tiny_chemistry for Moodle 5.2
+ * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> was adapted for tiny_chemistry
  * by Teaching and Learning Center (TLC, tlc@fh-ooe.at), FH Upper Austria
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tiny_chemistry\privacy;
-
-/**
- * Privacy Subsystem implementation for the Chemistry plugin for TinyMCE.
- *
- * @package    tiny_chemistry
- * @copyright  2022 Huong Nguyen <huongnv13@gmail.com>
- * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> was adapted for tiny_chemistry for Moodle 5.2
- * by Teaching and Learning Center (TLC, tlc@fh-ooe.at), FH Upper Austria
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 class provider implements \core_privacy\local\metadata\null_provider {
 
     public static function get_reason(): string {

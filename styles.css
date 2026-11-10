@@ -1,4 +1,37 @@
+/* Tiny Chemistry – Library-Buttons */
+
+.tiny_chemistry_library button,
 .tiny_equation_library button {
     margin: 0.25%;
     min-width: 10%;
+
+    /* Prevents text selection instead of clicking (Moodle 5.x / TinyMCE 7). */
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+
+    /* Securely center inside the button box. */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Crucially, everything in the button is permeable to the mouse, 
+   so that event.target is always the <button> self. */
+.tiny_chemistry_library button *,
+.tiny_equation_library button * {
+    pointer-events: none !important;
+}
+
+/* MathJax/SVG/image output explicitly, as it has its own defaults and handlers. */
+.tiny_chemistry_library button mjx-container,
+.tiny_chemistry_library button svg,
+.tiny_chemistry_library button img,
+.tiny_equation_library button mjx-container,
+.tiny_equation_library button svg,
+.tiny_equation_library button img {
+    pointer-events: none !important;
+    max-width: 100%;
+    height: auto;
 }

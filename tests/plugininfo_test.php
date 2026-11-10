@@ -25,7 +25,7 @@ use advanced_testcase;
  *
  * @package     tiny_chemistry
  * @covers      \tiny_chemistry\plugininfo::get_plugin_configuration_for_external
- * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> was adapted for tiny_chemistry for Moodle 5.2
+ * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> was adapted for tiny_chemistry
  * by Teaching and Learning Center (TLC, tlc@fh-ooe.at), FH Upper Austria
  * @copyright   2025 Moodle Pty Ltd
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

@@ -18,7 +18,7 @@
  *
  * @module      tiny_chemistry/ui
  * @copyright   2022 Huong Nguyen <huongnv13@gmail.com>
- * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> was adapted for tiny_chemistry for Moodle 5.2
+ * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> was adapted for tiny_chemistry
  * by Teaching and Learning Center (TLC, tlc@fh-ooe.at), FH Upper Austria
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -42,6 +42,46 @@ let lastCursorPos = 0;
  */
 export const handleAction = (editor) => {
     displayDialogue(editor);
+};
+
+/**
+ * Robustly find the closest matching ancestor for an event target.
+ *
+ * Works for text nodes, SVG elements and MathJax output where
+ * event.target is not a regular HTMLElement.
+ *
+ * @param {Event} e
+ * @param {String} selector
+ * @param {Element} boundary
+ * @returns {Element|null}
+ */
+const closestFromEvent = (e, selector, boundary) => {
+    // Prefer composedPath(): it also works across shadow roots.
+    const path = (typeof e.composedPath === 'function') ? e.composedPath() : [];
+    for (const node of path) {
+        if (node === boundary) {
+            break;
+        }
+        if (node && node.nodeType === Node.ELEMENT_NODE &&
+                typeof node.matches === 'function' && node.matches(selector)) {
+            return node;
+        }
+    }
+
+    // Fallback: manual walk up (handles text nodes and old SVGElement without closest()).
+    let node = e.target;
+    if (node && node.nodeType !== Node.ELEMENT_NODE) {
+        node = node.parentElement || node.parentNode;
+    }
+    while (node && node !== boundary) {
+        if (node.nodeType === Node.ELEMENT_NODE &&
+                typeof node.matches === 'function' && node.matches(selector)) {
+            return node;
+        }
+        node = node.parentElement || node.parentNode;
+    }
+
+    return null;
 };
 
 /**
@@ -76,19 +116,32 @@ const displayDialogue = async(editor) => {
         }).catch(displayException);
     });
 
+// Prevents a mousedown on the text from starting a selection
+// and thus the click event is suppressed (Moodle 5.x / TinyMCE 7).
+    root.addEventListener('mousedown', (e) => {
+        if (closestFromEvent(e, Selectors.elements.libraryItem, root)) {
+            e.preventDefault();
+        }
+    });
+
     root.addEventListener('click', (e) => {
-        const libraryItem = e.target.closest(Selectors.elements.libraryItem);
-        const submitAction = e.target.closest(Selectors.actions.submit);
-        const textArea = e.target.closest('.tiny_chemistry_chemistry');
+        const libraryItem = closestFromEvent(e, Selectors.elements.libraryItem, root);
         if (libraryItem) {
             e.preventDefault();
+            e.stopPropagation();
             selectLibraryItem(libraryItem, contextId);
+            return;
         }
+
+        const submitAction = closestFromEvent(e, Selectors.actions.submit, root);
         if (submitAction) {
             e.preventDefault();
             setChemistry(currentForm, editor);
             modal.destroy();
+            return;
         }
+
+        const textArea = closestFromEvent(e, Selectors.elements.chemistryTextArea, root);
         if (textArea) {
             debouncedPreviewUpdater();
         }
@@ -102,11 +155,9 @@ const displayDialogue = async(editor) => {
     });
 
     root.addEventListener('keydown', (e) => {
-        const libraryItem = e.target.closest(Selectors.elements.libraryItem);
-        if (libraryItem) {
-            if (e.keyCode == 37 || e.keyCode == 39) {
-                groupNavigation(e);
-            }
+        const libraryItem = closestFromEvent(e, Selectors.elements.libraryItem, root);
+        if (libraryItem && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+            groupNavigation(e);
         }
     });
 };
@@ -136,8 +187,22 @@ const getTemplateContext = (editor, data) => {
  * @param {number} contextId
  */
 const selectLibraryItem = (libraryItem, contextId) => {
-    const tex = libraryItem.getAttribute('data-tex');
+// The data-tex can be attached to the button itself OR to a child/parent element.
+    const texHolder = libraryItem.hasAttribute('data-tex')
+        ? libraryItem
+        : (libraryItem.querySelector('[data-tex]') || libraryItem.closest('[data-tex]'));
+
+    if (!texHolder) {
+        window.console.warn('tiny_chemistry: no data-tex found for', libraryItem);
+        return;
+    }
+
+    const tex = texHolder.getAttribute('data-tex');
     const input = currentForm.querySelector(Selectors.elements.chemistryTextArea);
+
+    if (!tex || !input) {
+        return;
+    }
     let oldValue;
     let newValue;
     let focusPoint = 0;
@@ -230,6 +295,9 @@ const groupNavigation = (e) => {
     e.preventDefault();
 
     const current = e.target.closest(Selectors.elements.libraryItem);
+    if (!current) {
+        return;
+    }
     const parent = current.parentNode; // This must be the <div> containing all the buttons of the group.
     const buttons = Array.prototype.slice.call(parent.querySelectorAll(Selectors.elements.libraryItem));
     const direction = e.keyCode !== 37 ? 1 : -1;

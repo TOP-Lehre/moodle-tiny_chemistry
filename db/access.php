@@ -20,7 +20,7 @@
  * @package    tiny_chemistry
  * @copyright  2025 David Woloszyn <david.woloszyn@moodle.com>
  * This plugin based on tiny_equation from Huong Nguyen <huongnv13@gmail.com> 
- * and David Woloszyn <david.woloszyn@moodle.com> and was adapted for tiny_chemistry for Moodle 5.2
+ * and David Woloszyn <david.woloszyn@moodle.com> and was adapted for tiny_chemistry
  * by Teaching and Learning Center (TLC, tlc@fh-ooe.at), FH Upper Austria
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
