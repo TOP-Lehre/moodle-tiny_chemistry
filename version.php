@@ -5,7 +5,6 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// (at your option) any later version.
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,7 +25,8 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-$plugin->version   = 2026042000;
-$plugin->requires  = 2026041000;
+$plugin->version   = 2026042001;
+$plugin->requires  = 2026041000; // Moodle 5.2
 $plugin->component = 'tiny_chemistry';
+$plugin->maturity = MATURITY_STABLE;
+$plugin->release = '1.0.1';

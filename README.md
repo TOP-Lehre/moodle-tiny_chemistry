@@ -4,9 +4,7 @@ This plugin is based on equation editor (original by Huong Nguyen <huongnv13@gma
 
 ## Version info
 
-### Plugin-Version: 2026042000 (Moodle 5.2)
-
-* Prepare first version of chemistry editor
+* Open README.md for more details
 
 ## Installation
 Download the zip file, unzip to a folder. Rename this folder to chemistry and copy to the public/lib/editor/tiny/plugins folder of your Moodle.
